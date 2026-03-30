@@ -1,0 +1,263 @@
+/* Footer Styles */
+footer {
+  background: #0a1929;
+  color: #fff;
+  padding: 60px 0 20px;
+  margin-top: 50px;
+  border-top: 3px solid #088178;
+}
+
+.footer-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 30px;
+}
+
+/* AFS Logo in Footer */
+footer .logo {
+  width: 220px;
+  height: auto;
+  max-height: 100px;
+  object-fit: contain;
+  margin-bottom: 25px;
+  background: white;
+  padding: 5px 8px;
+  border-radius: 4px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  border: 1px solid #e0e0e0;
+  transition: transform 0.3s ease;
+}
+
+footer .logo:hover {
+  transform: scale(1.05);
+  border-color: #088178;
+}
+
+footer h4 {
+  color: #fff;
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 20px;
+  position: relative;
+  padding-bottom: 10px;
+}
+
+footer h4::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 50px;
+  height: 3px;
+  background: #088178;
+}
+
+footer p, footer a {
+  color: #b0c4de;
+  font-size: 14px;
+  line-height: 1.8;
+  text-decoration: none;
+  margin-bottom: 12px;
+  display: block;
+}
+
+footer a:hover {
+  color: #088178;
+}
+
+/* Social Icons */
+.social-icons {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 30px;
+  flex-wrap: wrap;
+}
+
+.social-icons button {
+  width: 42px;
+  height: 42px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+  color: #fff;
+  font-size: 18px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.social-icons button:hover {
+  background: #088178;
+}
+
+/* Subscribe Form */
+.subscribe-form {
+  display: flex;
+  gap: 12px;
+  margin: 25px 0;
+}
+
+.subscribe-form input {
+  flex: 1;
+  padding: 14px 18px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.05);
+  color: #fff;
+  font-size: 14px;
+}
+
+.subscribe-form input:focus {
+  border-color: #088178;
+  outline: none;
+}
+
+.subscribe-form button {
+  padding: 14px 25px;
+  background: #088178;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.subscribe-form button:hover {
+  background: #066a62;
+}
+
+/* Workshop Badge */
+.workshop-badge {
+  margin-top: 25px;
+  padding: 14px;
+  background: rgba(8, 129, 120, 0.15);
+  border: 1px solid #088178;
+  border-radius: 40px;
+  text-align: center;
+}
+
+.workshop-badge span {
+  color: #088178;
+  font-size: 13px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+/* Copyright */
+.copyright {
+  text-align: center;
+  padding: 25px 0;
+  margin-top: 50px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  background: #05131f;
+}
+
+.copyright p {
+  color: #b0c4de;
+  font-size: 13px;
+  margin: 0;
+}
+
+/* ========== SIMPLE MOBILE RESPONSIVE ========== */
+
+/* Tablet (1024px to 800px) */
+@media (max-width: 1024px) and (min-width: 800px) {
+  .footer-container {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 25px;
+  }
+  
+  footer .logo {
+    width: 200px;
+  }
+}
+
+/* Mobile (799px and below) */
+@media (max-width: 799px) {
+  .footer-container {
+    grid-template-columns: repeat(2, 1fr); /* 2 columns */
+    gap: 20px;
+  }
+  
+  footer .logo {
+    width: 180px;
+  }
+  
+  .social-icons button {
+    width: 38px;
+    height: 38px;
+  }
+}
+
+/* Small Mobile (577px and below) */
+@media (max-width: 577px) {
+  .footer-container {
+    grid-template-columns: 1fr; /* 1 column */
+    text-align: center;
+  }
+  
+  footer .logo {
+    width: 160px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  
+  footer h4::after {
+    left: 50%;
+    transform: translateX(-50%);
+  }
+  
+  .social-icons {
+    justify-content: center;
+  }
+  
+  .subscribe-form {
+    flex-direction: column;
+  }
+  
+  .subscribe-form button {
+    width: 100%;
+  }
+}
+
+/* Very Small Mobile (375px and below) */
+@media (max-width: 375px) {
+  footer {
+    padding: 40px 0 15px;
+  }
+  
+  footer .logo {
+    width: 140px;
+  }
+  
+  footer h4 {
+    font-size: 16px;
+  }
+  
+  footer p, footer a {
+    font-size: 12px;
+  }
+  
+  .social-icons button {
+    width: 35px;
+    height: 35px;
+    font-size: 16px;
+  }
+  
+  .workshop-badge span {
+    font-size: 11px;
+  }
+  
+  .copyright p {
+    font-size: 11px;
+  }
+}

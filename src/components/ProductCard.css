@@ -1,0 +1,209 @@
+.product-card {
+  /* This prevents the card from becoming huge when alone */
+  max-width: 320px; 
+  width: 100%;
+  margin: 0 auto; /* Centers the card if it's the only one */
+  
+  background: #fff;
+  border-radius: 4px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: all 0.4s ease;
+  position: relative;
+  border: 1px solid #f0f0f0;
+}
+
+.product-grid {
+  display: grid;
+  /* This creates 3 equal columns */
+  grid-template-columns: repeat(4, 1fr); 
+  gap: 10px; /* Space between cards */
+  padding: 20px;
+}
+
+/* Make it responsive: 2 columns on tablets, 1 on mobile */
+@media (max-width: 992px) {
+  .product-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+  .product-grid {
+    grid-template-columns: 1fr;
+  }
+}
+/* Ensure the image container maintains a square aspect ratio */
+.product-image-container {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1 / 1; 
+  background: #f9f9f9;
+  overflow: hidden;
+}
+
+.main-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* This stops the image from stretching/distorting */
+}
+
+.product-card:hover .main-img {
+  transform: scale(1.08);
+}
+
+/* Popular Badge - Pill Shape */
+.popular-badge {
+  position: absolute;
+  bottom: 12px;
+  right: 12px;
+  background: rgba(0, 0, 0, 0.8);
+  color: white;
+  padding: 4px 14px;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  z-index: 10;
+}
+
+/* Wishlist Heart */
+.wishlist-icon {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: white;
+  border: none;
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  color: #888;
+  z-index: 11;
+  cursor: pointer;
+}
+
+.wishlist-icon.active {
+  color: #e63946;
+}
+
+/* Details Section */
+.product-details {
+  padding: 15px;
+  text-align: left;
+}
+
+.product-title {
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: #222;
+  margin-bottom: 8px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Star Ratings */
+.rating-row {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  margin-bottom: 10px;
+}
+
+.star-filled { color: #222; font-size: 0.8rem; }
+.star-empty { color: #ddd; font-size: 0.8rem; }
+
+.review-count {
+  font-size: 0.75rem;
+  color: #888;
+  margin-left: 5px;
+}
+
+/* Price Section */
+.price-row {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+}
+
+.currency {
+  font-size: 0.85rem;
+  color: #666;
+}
+
+.amount {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #000;
+}
+
+/* Hover Actions Overlay */
+.hover-actions {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  padding: 15px;
+  background: linear-gradient(transparent, rgba(255,255,255,0.9));
+  display: flex;
+  justify-content: center;
+  z-index: 12;
+}
+
+.quick-add {
+  background: #088178;
+  color: white;
+  border: none;
+  padding: 8px 20px;
+  border-radius: 4px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  box-shadow: 0 4px 15px rgba(8, 129, 120, 0.3);
+}
+
+.product-image-container {
+  position: relative;
+  overflow: hidden;
+}
+
+.image-wrapper {
+  position: relative;
+  width: 100%;
+  height: 350px; /* adjust based on your UI */
+}
+
+.image-wrapper .img {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  top: 0;
+  left: 0;
+  transition: opacity 0.5s ease-in-out;
+}
+
+/* Default state */
+.primary-img {
+  opacity: 1;
+  z-index: 1;
+}
+
+.secondary-img {
+  opacity: 0;
+  z-index: 2;
+}
+
+/* Hover effect */
+.product-card:hover .primary-img {
+  opacity: 0;
+}
+
+.product-card:hover .secondary-img {
+  opacity: 1;
+}

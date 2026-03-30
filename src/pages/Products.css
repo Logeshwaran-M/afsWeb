@@ -1,0 +1,45 @@
+/* Product Title Styling */
+.product-title {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #333;
+  line-height: 1.4;
+  height: 2.8em; /* Ensures alignment if titles wrap to 2 lines */
+  overflow: hidden;
+}
+
+/* Image Hover Effect */
+.product-card {
+  cursor: pointer;
+}
+
+.product-card img {
+  transition: transform 0.5s ease;
+}
+
+.product-card:hover img {
+  transform: scale(1.08);
+}
+
+/* Hide overlay icons by default */
+.overlay-icons {
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.product-card:hover .overlay-icons {
+  opacity: 1;
+}
+
+/* Badge Styling */
+.badge {
+  font-weight: 500;
+  font-size: 0.7rem;
+  letter-spacing: 0.5px;
+}
+
+/* Pricing */
+.fw-bold {
+  color: #1a1a1a;
+  font-size: 1.1rem;
+}

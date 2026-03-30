@@ -1,0 +1,245 @@
+/* ============================= */
+/* 🔥 CAROUSEL */
+/* ============================= */
+
+.carousel-wrapper {
+  position: relative;
+}
+
+.carousel-track {
+  display: flex;
+  gap: 20px;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  padding-bottom: 10px;
+}
+
+.carousel-track::-webkit-scrollbar {
+  display: none;
+}
+
+.carousel-card {
+  min-width: 220px;
+  flex: 0 0 auto;
+  transition: 0.3s ease;
+}
+
+.carousel-card:hover {
+  transform: translateY(-6px);
+}
+
+/* BUTTONS */
+.carousel-btn {
+  position: absolute;
+  top: 40%;
+  transform: translateY(-50%);
+  background: white;
+  border: none;
+  font-size: 22px;
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.15);
+  cursor: pointer;
+  z-index: 10;
+  transition: 0.3s;
+}
+
+.carousel-btn:hover {
+  background: black;
+  color: white;
+}
+
+.carousel-btn.left {
+  left: -10px;
+}
+
+.carousel-btn.right {
+  right: -10px;
+}
+
+
+/* ============================= */
+/* 🔥 REVIEW CARD */
+/* ============================= */
+
+.review-card {
+  border-radius: 16px;
+  border: none;
+  background: #fff;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+}
+
+
+/* ============================= */
+/* 🔥 INPUT FIELDS */
+/* ============================= */
+
+.custom-input {
+  border-radius: 10px;
+  border: 1px solid #ddd;
+  padding: 10px;
+  transition: 0.3s;
+  font-size: 14px;
+}
+
+.custom-input:focus {
+  border-color: black;
+  box-shadow: none;
+}
+
+
+/* ============================= */
+/* 🔥 STAR RATING (FINAL FIX) */
+/* ============================= */
+
+.star-rating {
+  display: flex;
+  gap: 8px;
+  font-size: 30px;
+  cursor: pointer;
+  user-select: none;
+}
+
+
+
+/* ⭐ ACTIVE STAR */
+.star.active {
+  color: #ffc107 !important;
+}
+
+/* ⭐ HOVER EFFECT */
+.star:hover {
+  transform: scale(1.2);
+}
+
+/* ⭐ RATING TEXT */
+.rating-text {
+  display: block;
+  margin-top: 5px;
+  font-size: 13px;
+  color: #666;
+}
+
+
+/* ============================= */
+/* 🔥 BUTTONS */
+/* ============================= */
+
+.submit-btn {
+  background: black;
+  color: white;
+  border-radius: 10px;
+  padding: 12px;
+  font-weight: 500;
+  border: none;
+  transition: all 0.3s ease;
+}
+
+.submit-btn:hover {
+  background: #222;
+  transform: translateY(-2px);
+}
+
+
+/* ============================= */
+/* 🔥 IMAGE PREVIEW */
+/* ============================= */
+
+.image-preview-wrapper {
+  position: relative;
+}
+
+.image-preview-wrapper img {
+  width: 100%;
+  border-radius: 12px;
+}
+
+/* TEXT OVERLAY */
+.name-overlay {
+  position: absolute;
+  top: 45%;
+  left: 55%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  color: white;
+}
+
+.name-overlay h4 {
+  font-size: 22px;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.name-overlay p {
+  font-size: 14px;
+  color: #ddd;
+}
+
+
+/* ============================= */
+/* 🔥 THUMBNAILS */
+/* ============================= */
+
+.thumb-img {
+  width: 100%;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.thumb-img:hover {
+  transform: scale(1.05);
+}
+
+
+/* ============================= */
+/* 🔥 DELIVERY BOX */
+/* ============================= */
+
+.delivery-box {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+  border-top: 1px solid #eee;
+  padding-top: 10px;
+  font-size: 13px;
+  text-align: center;
+}
+
+
+/* ============================= */
+/* 🔥 GENERAL UI IMPROVEMENTS */
+/* ============================= */
+
+body {
+  background-color: #f8f9fa;
+}
+
+h2, h3, h4, h5 {
+  color: #111;
+}
+
+.star-rating {
+  display: flex;
+  gap: 8px;
+  font-size: 28px;
+  cursor: pointer;
+}
+
+.star-icon {
+  color: #ddd;
+  transition: all 0.2s ease;
+}
+
+.star-icon.active {
+  color: #ffc107 !important; /* GOLD */
+}
+
+.star-icon:hover {
+  transform: scale(1.2);
+}
+
+.name-overlay {
+  transform: translate(-50%, -50%) skewX(-10deg) rotate(-2deg);
+}

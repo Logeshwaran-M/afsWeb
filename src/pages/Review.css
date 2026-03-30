@@ -1,0 +1,20 @@
+@keyframes scroll {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(calc(-250px * 5))} /* Adjust based on card width * number of cards */
+}
+
+.marquee-container {
+  overflow: hidden;
+  white-space: nowrap;
+  position: relative;
+}
+
+.marquee-content {
+  display: flex;
+  width: calc(250px * 10); /* Double the cards for seamless loop */
+  animation: scroll 30s linear infinite;
+}
+
+.marquee-content:hover {
+  animation-play-state: paused; /* Stops scrolling when user wants to read */
+}

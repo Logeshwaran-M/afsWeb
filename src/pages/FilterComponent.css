@@ -1,0 +1,164 @@
+.filter-system-container {
+  background: #ffffff;
+  width: 100%;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+}
+
+.afs-nav-bar {
+  display: flex;
+  justify-content: center;
+  gap: 40px; /* Space between menu items */
+  padding: 20px 0;
+}
+
+
+.filter-system-container {
+  width: 100%;
+  background: #f9f9f9; /* Light background for the filter bar */
+  border-bottom: 1px solid #eee;
+}
+
+.dynamic-dropdown-row {
+  max-width: 1200px; /* Or your preferred container width */
+  margin: 0 auto;
+  padding: 15px 20px;
+}
+
+.filter-group-container {
+  display: flex;
+  align-items: center;
+  /* This pushes label to left and dropdowns to right */
+  justify-content: space-between; 
+  width: 100%;
+}
+
+.filter-label-group {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #333;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.dropdown-gap-wrapper {
+  display: flex;
+  /* Space between the three select boxes */
+  gap: 20px; 
+}
+
+.afs-select {
+  padding: 8px 12px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  background-color: #fff;
+  min-width: 150px;
+  font-size: 14px;
+  cursor: pointer;
+  outline: none;
+}
+
+.afs-select:focus {
+  border-color: #008080; /* Teal from your logo */
+}
+
+.loader-dots {
+  font-size: 12px;
+  color: #999;
+  text-align: center;
+  padding-top: 5px;
+}
+
+.dynamic-dropdown-row {
+  background: #fcfcfc;
+  border-top: 1px solid #eee;
+  padding: 15px 0;
+  display: flex;
+  justify-content: center;
+}
+
+.filter-group-container {
+  display: flex;
+
+  justify-content: space-between;
+  gap: 30px; /* Gap between "Refine By" and the dropdowns */
+}
+
+.dropdown-gap-wrapper {
+  display: flex;
+  gap: 20px; /* This creates the gap between each <select> box */
+}
+
+.filter-label-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #008080;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.afs-select {
+  padding: 10px 15px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background-color: white;
+  min-width: 160px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.2s ease;
+}
+
+.afs-select:hover {
+  border-color: #008080;
+}
+
+.nav-item-wrapper {
+  position: relative;
+  cursor: pointer;
+}
+
+.nav-text {
+  font-size: 16px;
+  color: #444;
+}
+
+.nav-item-wrapper.active .nav-text {
+  color: #008080;
+  font-weight: 600;
+}
+
+.nav-underline {
+  position: absolute;
+  bottom: -5px;
+  height: 2px;
+  background: #008080;
+  width: 100%;
+}
+
+/* MOBILE ONLY */
+@media (max-width: 768px) {
+  /* Stack the selects vertically on mobile */
+  .dropdown-gap-wrapper {
+    flex-direction: column;
+    gap: 10px; /* space between selects */
+  }
+
+  /* Adjust dropdown width and height */
+  .dropdown-gap-wrapper select {
+    width: 100%;        /* full width on mobile */
+    height: 45px;       /* taller for easier touch */
+    font-size: 15px;    /* slightly larger text */
+    padding: 8px 12px;  /* inner padding */
+  }
+
+  /* Optional: reduce padding in container on mobile */
+  .filter-system-container {
+    padding: 8px 12px;
+  }
+
+  /* Optional: adjust label font size on mobile */
+  .filter-label-group span {
+    font-size: 14px;
+  }
+}
