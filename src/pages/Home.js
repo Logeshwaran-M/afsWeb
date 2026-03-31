@@ -48,7 +48,7 @@ useEffect(() => {
     try {
       const q = query(
         collection(db, "products"),
-        limit(8) // get first 8 products
+        limit(12) // get first 12 products
       );
 
       const snapshot = await getDocs(q);

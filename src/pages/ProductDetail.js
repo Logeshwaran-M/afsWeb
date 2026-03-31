@@ -87,7 +87,12 @@ const ProductDetails = () => {
   const carouselRef = useRef(null);
 
 
-
+  useEffect(() => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth"
+    });
+  }, [id]);
   // FETCH PRODUCT + RELATED + IMAGE HEADINGS
   useEffect(() => {
     const fetchProduct = async () => {
@@ -226,7 +231,7 @@ const ProductDetails = () => {
       const cartItem = {
         id: product.id,
         name: product.name,
-        price: (product.price || 0) + (selectedSizeData?.price || 0),
+        price: Number(product.price || 0) + Number(selectedSizeData?.price || 0),
         basePrice: product.price,
         size: selectedSizeData?.label,
         dimensions: selectedSizeData?.dimensions,
@@ -235,11 +240,14 @@ const ProductDetails = () => {
         customName: customerName,
         designation: designation,
         image: mainImage || product?.images?.[0],
+
+        // ✅ ADD THIS LINE
+        textPosition: product?.textPositions?.fields?.[0],
+
         quantity: 1
       };
 
       addToCart(cartItem);
-      toast.success('Added to cart ✅');
     } catch (err) {
       console.error("Add to cart error:", err);
       toast.error("Cannot add to cart. Preview image failed.");
@@ -328,15 +336,31 @@ const ProductDetails = () => {
                       position: "absolute",
                       top: product?.textPositions?.fields?.[0]?.top || "50%",
                       left: product?.textPositions?.fields?.[0]?.left || "50%",
-                      transform: "translate(-50%, -90%) skewX(-10deg) ",
+                      transform: "translate(-50%, -90%) skewX(-10deg)",
                       color: "gold",
-                      textAlign: "center"
+                      textAlign: "center",
+                      lineHeight: "1.4", // ✅ overall spacing control
                     }}
                   >
-                    <h4 style={{ margin: 0 }}>
+                    <h4
+                      style={{
+                        margin: 0,
+                        marginBottom: "4px", // ✅ space between name & designation
+                        fontWeight: "600",
+                        letterSpacing: "0.5px"
+                      }}
+                    >
                       {customerName || "Your Name"}
                     </h4>
-                    <p style={{ margin: 0 }}>
+
+                    <p
+                      style={{
+                        margin: 0,
+                        fontSize: "14px",
+                        letterSpacing: "1px", // ✅ better readability
+                        opacity: 0.9
+                      }}
+                    >
                       {designation || "Your Designation"}
                     </p>
                   </div>
@@ -532,42 +556,46 @@ const ProductDetails = () => {
         <Modal.Header closeButton>
           <Modal.Title>Preview Design</Modal.Title>
         </Modal.Header>
+
         <Modal.Body className="text-center">
-          <div style={{ position: 'relative', display: 'inline-block' }}>
+          <div style={{ position: "relative", display: "inline-block" }}>
+
+            {/* IMAGE */}
             <img
               src={mainImage || product?.images?.[0]}
               alt="Preview"
               className="img-fluid"
             />
+
+            {/* ✅ NAME + DESIGNATION (SAME POSITION) */}
             <div
               style={{
-                position: 'absolute',
-                top: '20%',
-                left: '50%',
-                transform: 'translateX(-50%)',
-                color: 'black',
-                fontWeight: 'bold',
-                fontSize: '20px'
+                position: "absolute",
+                top: product?.textPositions?.fields?.[0]?.top || "50%",
+                left: product?.textPositions?.fields?.[0]?.left || "50%",
+                transform: "translate(-50%, -90%)",
+                color: "gold",
+                textAlign: "center"
               }}
             >
-              {customerName || "Your Name"}
+              <h4 style={{ margin: 0 }}>
+                {customerName || "Your Name"}
+              </h4>
+              <p style={{ margin: 0 }}>
+                {designation || "Your Designation"}
+              </p>
             </div>
-            <div
-              style={{
-                position: 'absolute',
-                bottom: '10%',
-                left: '50%',
-                transform: 'translateX(-50%)',
-                color: 'gray',
-                fontSize: '16px'
-              }}
-            >
-              {designation || "Your Designation"}
-            </div>
+
           </div>
         </Modal.Body>
+
         <Modal.Footer>
-          <Button variant="secondary" onClick={() => setShowPreviewModal(false)}>Close</Button>
+          <Button
+            variant="secondary"
+            onClick={() => setShowPreviewModal(false)}
+          >
+            Close
+          </Button>
         </Modal.Footer>
       </Modal>
 

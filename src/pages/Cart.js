@@ -43,12 +43,12 @@ const Cart = () => {
   return (
     <section className="cart-section section-p1">
       <h2>Shopping Cart</h2>
-      
+
       <div className="cart-container">
         <div className="cart-items">
           {cartItems.map(item => (
-            <motion.div 
-              key={item.uniqueId} 
+            <motion.div
+              key={item.uniqueId}
               className="cart-item"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -92,7 +92,7 @@ const Cart = () => {
 
               <div className="item-total">
                 <p>₹ {item.price * item.quantity}</p>
-                <button 
+                <button
                   className="remove-btn"
                   onClick={() => removeFromCart(item.uniqueId)}
                 >
@@ -132,8 +132,8 @@ const Cart = () => {
             <span>₹ {getCartTotal()}</span>
           </div>
 
-          <button 
-            className="btn-primary checkout-btn" 
+          <button
+            className="btn-primary checkout-btn"
             onClick={handleCheckout}
           >
             Proceed to Checkout
@@ -167,12 +167,12 @@ const Cart = () => {
               />
               <div
                 style={{
-                  position: 'absolute',
-                  top: '10%',
-                  left: '10%',
-                  color: 'white',
-                  textShadow: '2px 2px 4px black',
-                  fontSize: '1.2rem',
+                  position: "absolute",
+                  top: previewItem?.textPosition?.top || "50%",
+                  left: previewItem?.textPosition?.left || "50%",
+                  transform: "translate(-50%, -90%)",
+                  color: "gold",
+                  textAlign: "center"
                 }}
               >
                 <h4>{previewItem.customName}</h4>

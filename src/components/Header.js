@@ -147,6 +147,7 @@ const Header = () => {
                         <div className="menu-item-row" onClick={() => handleNavigation('/Desk/police')}>Police Officers</div>
                         <div className="menu-item-row" onClick={() => handleNavigation('/Desk/ca')}>CA, CFA, CMA & CS</div>
                         <div className="menu-item-row" onClick={() => handleNavigation('/Desk/armed')}>Armed Forces</div>
+                        <div className="menu-item-row" onClick={() => handleNavigation('/Desk/government')}>Government Officials</div>
 
                       </div>
                     </div>

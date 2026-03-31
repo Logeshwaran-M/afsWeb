@@ -36,12 +36,14 @@ export const CartProvider = ({ children }) => {
 
   // Add item to cart
   const addToCart = (product) => {
-    const uniqueId =
-      product.id +
-      '-' +
-      (product.customName || '') +
-      '-' +
-      (product.designation || '');
+const uniqueId =
+  product.id +
+  '-' +
+  (product.customName || '') +
+  '-' +
+  (product.designation || '') +
+  '-' +
+  (product.size || '');
 
     setCartItems((prev) => {
       const existing = prev.find((item) => item.uniqueId === uniqueId);
