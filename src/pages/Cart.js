@@ -55,7 +55,11 @@ const Cart = () => {
               exit={{ opacity: 0 }}
             >
               <div className="cart-image-wrapper" style={{ position: 'relative' }}>
-                <img src={item.image} alt={item.name} />
+   <img
+  src={item.image}
+  alt=""
+  style={{ width: "100%", borderRadius: "8px" }}
+/>
                 <button
                   className="preview-btn"
                   onClick={() => handleShowPreview(item)}
@@ -175,8 +179,24 @@ const Cart = () => {
                   textAlign: "center"
                 }}
               >
-                <h4>{previewItem.customName}</h4>
-                <p>{previewItem.designation}</p>
+              <h4
+  style={{
+    margin: 0,
+    fontFamily: previewItem.fontFamily,
+    color: previewItem.textColor
+  }}
+>
+  {previewItem.customerName}
+</h4>
+              <p
+  style={{
+    margin: 0,
+    fontFamily: previewItem.fontFamily,
+    color: previewItem.textColor
+  }}
+>
+  {previewItem.designation}
+</p>
               </div>
             </div>
           )}

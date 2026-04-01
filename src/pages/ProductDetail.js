@@ -61,8 +61,13 @@ const ProductDetails = () => {
   const [sizes, setSizes] = useState([]);
   const [selectedSize, setSelectedSize] = useState("");
   const [isWishlisted, setIsWishlisted] = useState(false);
+  const [textColor, setTextColor] = useState("gold"); // default
+const [fontFamily, setFontFamily] = useState("'Poppins', sans-serif"); 
+const [nameFontSize, setNameFontSize] = useState(20);
+const [designationFontSize, setDesignationFontSize] = useState(14);// default
   const [product, setProduct] = useState(null);
   const [relatedProducts, setRelatedProducts] = useState([]);
+  const [selectedHeadingIndex, setSelectedHeadingIndex] = useState(0);
   const [reviews, setReviews] = useState(defaultReviews);
   const [mainImage, setMainImage] = useState("");
   const [customerName, setCustomerName] = useState("");
@@ -93,6 +98,19 @@ const ProductDetails = () => {
       behavior: "smooth"
     });
   }, [id]);
+
+
+  useEffect(() => {
+  if (!product?.images) return;
+
+  // if user entered anything → switch to 3rd image
+  if (customerName || designation) {
+    const customIndex = 2; // 👉 3rd image (0,1,2)
+
+    setSelectedImageIndex(customIndex);
+    setMainImage(product.images[customIndex]);
+  }
+}, [customerName, designation, product]);
   // FETCH PRODUCT + RELATED + IMAGE HEADINGS
   useEffect(() => {
     const fetchProduct = async () => {
@@ -170,17 +188,7 @@ const ProductDetails = () => {
   }, [id]);
 
   // Update main image when customizing
-  useEffect(() => {
-    if (!product) return;
-
-    if (customerName || designation) {
-      // 🔥 Switch to 2nd image (custom view)
-      setMainImage(product.images[2] || product.images[0]);
-    } else {
-      // 🔥 Back to original
-      setMainImage(product.images[0]);
-    }
-  }, [customerName, designation, product]);
+ 
 
   const handlePreview = async () => {
     if (!previewRef.current) return;
@@ -192,67 +200,61 @@ const ProductDetails = () => {
       toast.error("Cannot generate preview. Image may be blocked by CORS.");
     }
   };
+const handleAddToCart = async () => {
+  if (!customerName.trim() || !designation.trim()) {
+    toast.error("Please fill all fields");
+    return;
+  }
 
-  const handleAddToCart = async () => {
-    // RESET ERRORS
-    setErrors({ customerName: false, designation: false });
+  if (!previewRef.current) return;
 
-    let hasError = false;
+  try {
+    // wait for fonts + render
+    await document.fonts.ready;
+    await new Promise((r) => setTimeout(r, 400));
 
-    if (!customerName.trim()) {
-      setErrors(prev => ({ ...prev, customerName: true }));
-      hasError = true;
-    }
+    const canvas = await html2canvas(previewRef.current, {
+      useCORS: true,
+      scale: 3
+    });
 
-    if (!designation.trim()) {
-      setErrors(prev => ({ ...prev, designation: true }));
-      hasError = true;
-    }
+    const image = canvas.toDataURL("image/png");
 
-    if (hasError) {
-      toast.error("Please fill all required fields");
-      return;
-    }
+    const proxyImage = `https://cors-anywhere.herokuapp.com/${mainImage}`;
 
-    if (!previewRef.current) return;
+    const selectedSizeData = sizes[selectedSize];
 
-    try {
-      const canvas = await html2canvas(previewRef.current, {
-        useCORS: true,
-        allowTaint: false,
-        scale: 2,
-        logging: true,
-      });
+    const cartItem = {
+      id: product.id,
+      name: product.name,
+      price:
+        Number(product.price || 0) +
+        Number(selectedSizeData?.price || 0),
 
-      const image = canvas.toDataURL("image/png");
+      size: selectedSizeData?.label,
 
-      const selectedSizeData = sizes[selectedSize];
+      // 🔥 FINAL IMAGE (CUSTOMIZED)
+      image: mainImage,
 
-      const cartItem = {
-        id: product.id,
-        name: product.name,
-        price: Number(product.price || 0) + Number(selectedSizeData?.price || 0),
-        basePrice: product.price,
-        size: selectedSizeData?.label,
-        dimensions: selectedSizeData?.dimensions,
-        categoryId: selectedSizeData?.categoryId,
-        categoryName: selectedSizeData?.categoryName,
-        customName: customerName,
-        designation: designation,
-        image: mainImage || product?.images?.[0],
+      // 🔥 SAVE DATA ALSO (optional future use)
+      selectedImage: mainImage,
+      customerName,
+  designation,
+  fontFamily,
+  textColor,
+  textPosition: product?.textPositions?.fields?.[0],
+      quantity: 1
+    };
 
-        // ✅ ADD THIS LINE
-        textPosition: product?.textPositions?.fields?.[0],
+    addToCart(cartItem);
+    toast.success("Added to cart ✅");
+    console.log("Captured image:", image);
 
-        quantity: 1
-      };
-
-      addToCart(cartItem);
-    } catch (err) {
-      console.error("Add to cart error:", err);
-      toast.error("Cannot add to cart. Preview image failed.");
-    }
-  };
+  } catch (err) {
+    console.error(err);
+    toast.error("Image capture failed ❌");
+  }
+};
 
   const handleAddReview = async () => {
     if (!newReview.name || !newReview.comment) {
@@ -291,13 +293,24 @@ const ProductDetails = () => {
     }
   };
 
+useEffect(() => {
+  if (!product?.images) return;
+
+  const img = product.images[selectedImageIndex] || product.images[0];
+  setMainImage(img);
+}, [selectedImageIndex, product]);
+
   // Handle image heading click
-  const handleImageHeadingClick = (index) => {
-    setSelectedImageIndex(index);
-    if (product?.images?.[index]) {
-      setMainImage(product.images[index]);
-    }
-  };
+const handleImageHeadingClick = (index) => {
+  setSelectedHeadingIndex(index);
+
+  const newIndex = index + 2; // shift
+  setSelectedImageIndex(newIndex);
+
+  if (product?.images?.[newIndex]) {
+    setMainImage(product.images[newIndex]);
+  }
+};
 
   const selectedSizeData = sizes[selectedSize];
   const total =
@@ -311,7 +324,7 @@ const ProductDetails = () => {
         {/* LEFT IMAGE */}
         <Col md={7}>
           <div className="image-preview-wrapper" ref={previewRef}>
-            <div className="image-preview-wrapper" ref={previewRef}>
+          
               {/* 👉 Show ORIGINAL image (no text) */}
               {!isCustomizing && (
                 <img
@@ -325,7 +338,7 @@ const ProductDetails = () => {
               {isCustomizing && (
                 <div style={{ position: "relative" }}>
                   <img
-                    src={mainImage || product?.images?.[2] || product?.images?.[0]}
+                    src={mainImage || product?.images?.[3] || product?.images?.[0]}
                     className="img-fluid"
                     alt="custom"
                   />
@@ -337,9 +350,10 @@ const ProductDetails = () => {
                       top: product?.textPositions?.fields?.[0]?.top || "50%",
                       left: product?.textPositions?.fields?.[0]?.left || "50%",
                       transform: "translate(-50%, -90%) skewX(-10deg)",
-                      color: "gold",
+                     color: textColor,
+                    fontFamily: fontFamily,
                       textAlign: "center",
-                      lineHeight: "1.4", // ✅ overall spacing control
+                      lineHeight: "1.3", // ✅ overall spacing control
                     }}
                   >
                     <h4
@@ -347,18 +361,19 @@ const ProductDetails = () => {
                         margin: 0,
                         marginBottom: "4px", // ✅ space between name & designation
                         fontWeight: "600",
-                        letterSpacing: "0.5px"
+                        letterSpacing: "0.5px",
+                          fontSize: `${nameFontSize}px` 
                       }}
                     >
                       {customerName || "Your Name"}
                     </h4>
 
-                    <p
+                    <p 
                       style={{
                         margin: 0,
-                        fontSize: "14px",
+                          fontSize: `${designationFontSize}px`,
                         letterSpacing: "1px", // ✅ better readability
-                        opacity: 0.9
+                        opacity: 0.9,
                       }}
                     >
                       {designation || "Your Designation"}
@@ -366,32 +381,12 @@ const ProductDetails = () => {
                   </div>
                 </div>
               )}
+
             </div>
-          </div>
+       
 
           {/* Image Headings Section */}
-          {imageHeadings.length > 0 && (
-            <Row className="mt-3 mb-3">
-              <Col>
-                <h6 className="mb-2">Select Design:</h6>
-                <div className="d-flex flex-wrap gap-2">
-                  {imageHeadings.map((heading, idx) => (
-                    heading && heading.trim() !== "" && (
-                      <Button
-                        key={idx}
-                        variant={selectedImageIndex === idx ? "dark" : "outline-dark"}
-                        size="sm"
-                        onClick={() => handleImageHeadingClick(idx)}
-                        className="mb-2"
-                      >
-                        {heading}
-                      </Button>
-                    )
-                  ))}
-                </div>
-              </Col>
-            </Row>
-          )}
+     
 
           {/* Thumbnail Images */}
           <Row className="g-2">
@@ -455,7 +450,7 @@ const ProductDetails = () => {
                   key={index}
                   onClick={() => setSelectedSize(index)}
                   style={{
-                    padding: "10px 16px",
+                    padding: "6px 16px",
                     borderRadius: "30px",
                     border: selectedSize === index ? "2px solid black" : "1px solid #ccc",
                     background: selectedSize === index ? "black" : "white",
@@ -469,15 +464,49 @@ const ProductDetails = () => {
                 </div>
               ))
             ) : (
-              <p>No sizes available</p>
+              <p></p>
             )}
           </div>
           <hr />
 
-          <h6>Customize Your Name Plate</h6>
+             {imageHeadings.length > 0 && (
+            <Row className="mt-3 mb-3">
+              <Col>
+                <h6 className="mb-2">Select Design:</h6>
+                <div className="d-flex flex-wrap gap-2">
+                  {imageHeadings.map((heading, idx) => (
+                    heading && heading.trim() !== "" && (
+                      <Button
+                        key={idx}
+                       variant={selectedHeadingIndex === idx ? "dark" : "outline-dark"}
+                        size="sm"
+                        onClick={() => handleImageHeadingClick(idx)}
+                        className="mb-2"
+                      >
+                        {heading}
+                      </Button>
+                    )
+                  ))}
+                </div>
+              </Col>
+            </Row>
+          )}
 
           <hr />
-
+<div className="mb-3">
+  <label className="form-label fw-semibold">Font Style</label>
+<select
+  className="form-control"
+  value={fontFamily}
+  onChange={(e) => setFontFamily(e.target.value)}
+>
+    <option value="'Cinzel', serif">Cinzel (Nameplate Style)</option>
+  <option value="'Poppins', sans-serif">Poppins (Modern)</option>
+  <option value="'Playfair Display', serif">Playfair (Elegant)</option>
+  <option value="'Orbitron', sans-serif">Orbitron (Tech)</option>
+  <option value="'Pacifico', cursive">Pacifico (Stylish)</option>
+</select>
+</div>
           {/* NAME FIELD */}
           <div className="mb-3">
             <label className="form-label fw-semibold">Name</label>
@@ -493,6 +522,27 @@ const ProductDetails = () => {
               <div className="invalid-feedback">Name is required</div>
             )}
           </div>
+          <div className="mb-3">
+  <div className="d-flex align-items-center gap-2">
+    <Button
+      size="sm"
+      variant="outline-dark"
+      onClick={() => setNameFontSize(prev => Math.max(prev - 1, 10))}
+    >
+         -
+    </Button>
+
+    <span>Aa</span>
+
+    <Button
+      size="sm"
+      variant="outline-dark"
+      onClick={() => setNameFontSize(prev => prev + 1)}
+    >
+        +
+    </Button>
+  </div>
+</div>
 
           {/* DESIGNATION FIELD */}
           <div className="mb-3">
@@ -510,14 +560,56 @@ const ProductDetails = () => {
             )}
           </div>
 
+          <div className="mb-3">
+  <div className="d-flex align-items-center gap-2">
+    <Button
+      size="sm"
+      variant="outline-dark"
+      onClick={() => setDesignationFontSize(prev => Math.max(prev - 1, 8))}
+    >
+         -
+    </Button>
+
+    <span>Aa</span>
+
+    <Button
+      size="sm"
+      variant="outline-dark"
+      onClick={() => setDesignationFontSize(prev => prev + 1)}
+    >
+         +
+    </Button>
+  </div>
+</div>
+
+                        {/* TEXT COLOR */}
+<div className="mb-3">
+  <label className="form-label fw-semibold">Text Color</label>
+  <div className="d-flex gap-2">
+    {["gold", "black", "white"].map((color) => (
+      <Button
+        key={color}
+        size="sm"
+        variant={textColor === color ? "dark" : "outline-dark"}
+        onClick={() => setTextColor(color)}
+      >
+        {color}
+      </Button>
+    ))}
+  </div>
+</div>
+
+{/* FONT STYLE */}
+
+
           {/* Buttons */}
           <div className="d-grid gap-2">
             <Button variant="dark" onClick={handlePreview}>
               👁 Preview Design
             </Button>
-            <Button variant="dark" size="lg" onClick={handleAddToCart}>
-              <FaShoppingCart className="me-2" />
-              Add to Cart
+            <Button variant="dark" size="sm" onClick={handleAddToCart}>
+             
+            <FaShoppingCart />   Add to Cart
             </Button>
 
             <Button
@@ -574,7 +666,8 @@ const ProductDetails = () => {
                 top: product?.textPositions?.fields?.[0]?.top || "50%",
                 left: product?.textPositions?.fields?.[0]?.left || "50%",
                 transform: "translate(-50%, -90%)",
-                color: "gold",
+               color: textColor,
+fontFamily: fontFamily,
                 textAlign: "center"
               }}
             >
