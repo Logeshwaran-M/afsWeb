@@ -59,7 +59,8 @@ const Banner = () => {
         textAlign: "center",
         color: "#fff",
         position: "relative",
-        overflow: "hidden"
+        overflow: "hidden",
+        
       }}
     >
 
@@ -74,68 +75,56 @@ const Banner = () => {
           padding: "0 20px"
         }}
       >
-        <h1
-          style={{
-            fontSize: "25px",
-            fontWeight: "300",
-            marginBottom: "20px",
-            letterSpacing: "2px",
-            color: "#ffffff",
-            lineHeight: "1.2",
-            textShadow: `
-              0px 2px 4px rgba(0,0,0,0.6),
-              0px 4px 10px rgba(0,0,0,0.5),
-              0px 8px 20px rgba(0,0,0,0.4)
-            `
-          }}
-        >
+    <h1
+  style={{
+    fontSize: "32px",
+    fontWeight: "500",
+    marginBottom: "20px",
+    letterSpacing: "1.5px",
+    color: "#ffffff",
+    lineHeight: "1.3",
+     textShadow: "0px 2px 8px rgba(0,0,0,0.9)" 
+  }}
+>
           {banner?.title || "Give your home that finishing touch"}
         </h1>
 
-        <p
-          style={{
-            fontSize: "18px",
-            marginBottom: "30px",
-            color: "#f5f5f5",
-            letterSpacing: "1px",
-            textShadow: `
-              0px 2px 4px rgba(0,0,0,0.6),
-              0px 4px 10px rgba(0,0,0,0.5),
-              0px 8px 20px rgba(0,0,0,0.4)
-            `
-          }}
-        >
-          Premium Name Plates for Your Dream Home ✨
+      <p
+  style={{
+    fontSize: "18px",
+    marginBottom: "30px",
+    color: "#e0e0e0",
+    letterSpacing: "1px",
+     textShadow: "0px 2px 8px rgba(0,0,0,0.9)" 
+  }}
+>
+          Premium Name Plates for Your Dream Home 
         </p>
 
-        <button
-          style={{
-            padding: "14px 35px",
-            border: "1px solid #fff",
-            background: "transparent",
-            color: "#fff",
-            fontSize: "16px",
-            borderRadius: "0px",
-            cursor: "pointer",
-            letterSpacing: "1px",
-            transition: "0.3s",
-            textShadow: `
-              0px 1px 3px rgba(0,0,0,0.6),
-              0px 3px 8px rgba(0,0,0,0.5)
-            `
-          }}
-          onClick={() => navigate("/House")}
-          onMouseOver={(e) => {
-            e.target.style.background = "#fff";
-            e.target.style.color = "#000";
-          }}
-          onMouseOut={(e) => {
-            e.target.style.background = "transparent";
-            e.target.style.color = "#fff";
-          }}
-        >
-          Browse our collection →
-        </button>
+       <button
+  style={{
+    padding: "14px 35px",
+    border: "none",
+    background: "black",
+    color: "white",
+    fontSize: "16px",
+    borderRadius: "4px",
+    cursor: "pointer",
+    letterSpacing: "1px",
+    transition: "0.3s"
+  }}
+  onClick={() => navigate("/Desk")}
+  onMouseOver={(e) => {
+    e.target.style.background = "#ffffff";
+    e.target.style.color = "#000000";
+  }}
+  onMouseOut={(e) => {
+    e.target.style.background = "#000000";
+      e.target.style.color = "#ffffff";
+  }}
+>
+  Browse our collection →
+</button>
       </motion.div>
 
     </div>
