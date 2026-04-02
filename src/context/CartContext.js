@@ -34,35 +34,19 @@ export const CartProvider = ({ children }) => {
     localStorage.setItem('orders', JSON.stringify(orders));
   }, [orders]);
 
-  // Add item to cart
-  const addToCart = (product) => {
-const uniqueId =
-  product.id +
-  '-' +
-  (product.customName || '') +
-  '-' +
-  (product.designation || '') +
-  '-' +
-  (product.size || '');
+const addToCart = (product) => {
+  const uniqueId = product.id + "-" + Date.now(); // always unique
 
-    setCartItems((prev) => {
-      const existing = prev.find((item) => item.uniqueId === uniqueId);
-
-      if (existing) {
-        // Increment quantity if same product + text combo exists
-        return prev.map((item) =>
-          item.uniqueId === uniqueId
-            ? { ...item, quantity: item.quantity + (product.quantity || 1) }
-            : item
-        );
-      }
-
-      // Add new product if it doesn't exist
-      return [...prev, { ...product, quantity: product.quantity || 1, uniqueId }];
-    });
-
-    toast.success('Added to cart ✅');
+  const newItem = {
+    ...product,
+    uniqueId,
+    quantity: product.quantity || 1,
   };
+
+  setCartItems((prev) => [...prev, newItem]);
+
+  toast.success('Added to cart ✅');
+};
 
   // Remove item from cart
   const removeFromCart = (uniqueId) => {

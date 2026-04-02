@@ -13,6 +13,15 @@ const Cart = () => {
   const [showPreview, setShowPreview] = useState(false);
   const [previewItem, setPreviewItem] = useState(null);
 
+
+  const isNumberPlate =
+  previewItem?.category === "House" &&
+  previewItem?.subCategory === "numberplates";
+
+  const showText =
+  (previewItem?.category === "House" &&
+    previewItem?.subCategory === "numberplates") ||
+  previewItem?.category === "Desk";
   // ✅ New state for order note
   const [orderNote, setOrderNote] = useState('');
 
@@ -83,7 +92,7 @@ const Cart = () => {
                 <h3>{item.name}</h3>
                 <p className="item-price">₹ {item.price}</p>
 
-                {item.customName && <p><strong>Name:</strong> {item.customName}</p>}
+                {item.customerName && <p><strong>Custom Text:</strong> {item.customerName}</p>}
                 {item.designation && <p><strong>Designation:</strong> {item.designation}</p>}
                 {item.size && <p><strong>Size:</strong> {item.size}</p>}
 
@@ -169,35 +178,58 @@ const Cart = () => {
                 alt={previewItem.name}
                 style={{ width: '100%', borderRadius: '4px' }}
               />
-              <div
-                style={{
-                  position: "absolute",
-                  top: previewItem?.textPosition?.top || "50%",
-                  left: previewItem?.textPosition?.left || "50%",
-                  transform: "translate(-50%, -90%)",
-                  color: "gold",
-                  textAlign: "center"
-                }}
-              >
-              <h4
-  style={{
-    margin: 0,
-    fontFamily: previewItem.fontFamily,
-    color: previewItem.textColor
-  }}
->
-  {previewItem.customerName}
-</h4>
-              <p
-  style={{
-    margin: 0,
-    fontFamily: previewItem.fontFamily,
-    color: previewItem.textColor
-  }}
->
-  {previewItem.designation}
-</p>
-              </div>
+           {showText && (
+  <div
+    style={{
+      position: "absolute",
+      top: previewItem?.textPosition?.top || "50%",
+      left: previewItem?.textPosition?.left || "50%",
+      transform: "translate(-50%, -90%)",
+      textAlign: "center"
+    }}
+  >
+    {isNumberPlate ? (
+      <div
+        style={{
+          fontSize: "80px",
+          fontFamily: previewItem.fontFamily,
+          color: previewItem.textColor,
+          whiteSpace: "pre-line"
+        }}
+      >
+        {previewItem.customerName}
+      </div>
+    ) : (
+      <>
+        <h4
+          style={{
+            margin: 0,
+            fontFamily: previewItem.fontFamily,
+            color: previewItem.textColor,
+            fontSize: previewItem.nameFontSize
+              ? `${previewItem.nameFontSize}px`
+              : "20px",
+          }}
+        >
+          {previewItem.customerName}
+        </h4>
+
+        <p
+          style={{
+            margin: 0,
+            fontFamily: previewItem.fontFamily,
+            color: previewItem.textColor,
+            fontSize: previewItem.designationFontSize
+              ? `${previewItem.designationFontSize}px`
+              : "14px",
+          }}
+        >
+          {previewItem.designation}
+        </p>
+      </>
+    )}
+  </div>
+)}
             </div>
           )}
         </Modal.Body>

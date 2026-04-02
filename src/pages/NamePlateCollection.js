@@ -11,7 +11,7 @@ const collections = [
     desc: "Make your mark in the office with curated wood and stone pieces.",
     // image: deskImage, 
     label: "View Executive Range",
-    link: "/collections/desk",
+    link: "/Desk",
     image:"https://housenama.com/cdn/shop/products/komoda-modern-brass-door-numbers-and-letters-housenama-1.jpg?v=1736847907&width=823"
   },
   {
@@ -19,7 +19,7 @@ const collections = [
     desc: "Bold geometric shapes and premium finishes for the modern home.",
     // image: modernImage,
     label: "Explore Modern Designs",
-    link: "/collections/modern",
+    link: "/House",
     image:"https://housenama.com/cdn/shop/products/warli-stainless-steel-name-plate-housenama-1.jpg?v=1736847598&width=823"
   },
   {
@@ -27,7 +27,7 @@ const collections = [
     desc: "Floating script designs, precision-cut for a sleek, industrial look.",
     // image: metalImage,
     label: "Discover Floating Metal",
-    link: "/collections/metal",
+    link: "/House",
     image:"https://housenama.com/cdn/shop/products/gulshan-steel-name-plate-housenama-1.jpg?v=1736847996&width=823"
   }
 ];

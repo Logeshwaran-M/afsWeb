@@ -91,6 +91,9 @@ const [designationFontSize, setDesignationFontSize] = useState(14);// default
 
   const carouselRef = useRef(null);
 
+  const showTextOnImage =
+  (product?.category === "House" && product?.subCategory === "numberplates") ||
+  product?.category === "Desk";
 
   useEffect(() => {
     window.scrollTo({
@@ -200,11 +203,23 @@ const [designationFontSize, setDesignationFontSize] = useState(14);// default
       toast.error("Cannot generate preview. Image may be blocked by CORS.");
     }
   };
+
+    const isNumberPlate =
+  product?.category === "House" &&
+  product?.subCategory === "numberplates";
+
 const handleAddToCart = async () => {
+if (isNumberPlate) {
+  if (!customerName.trim()) {
+    toast.error("Please enter house number");
+    return;
+  }
+} else {
   if (!customerName.trim() || !designation.trim()) {
     toast.error("Please fill all fields");
     return;
   }
+}
 
   if (!previewRef.current) return;
 
@@ -218,14 +233,18 @@ const handleAddToCart = async () => {
       scale: 3
     });
 
-    const image = canvas.toDataURL("image/png");
+    const capturedImage = canvas.toDataURL("image/png");
+
+// fallback logic
+const finalMainImage = mainImage || product?.images?.[0];
 
     const proxyImage = `https://cors-anywhere.herokuapp.com/${mainImage}`;
 
     const selectedSizeData = sizes[selectedSize];
 
     const cartItem = {
-      id: product.id,
+    uniqueId: `${product.id}-${Date.now()}`,
+id: product.id,
       name: product.name,
       price:
         Number(product.price || 0) +
@@ -234,21 +253,25 @@ const handleAddToCart = async () => {
       size: selectedSizeData?.label,
 
       // 🔥 FINAL IMAGE (CUSTOMIZED)
-      image: mainImage,
+      image: finalMainImage,
 
       // 🔥 SAVE DATA ALSO (optional future use)
       selectedImage: mainImage,
+      category: product.category,
+subCategory: product.subCategory,
       customerName,
   designation,
   fontFamily,
   textColor,
+    nameFontSize,
+    designationFontSize,
   textPosition: product?.textPositions?.fields?.[0],
       quantity: 1
     };
 
     addToCart(cartItem);
     toast.success("Added to cart ✅");
-    console.log("Captured image:", image);
+   
 
   } catch (err) {
     console.error(err);
@@ -293,6 +316,8 @@ const handleAddToCart = async () => {
     }
   };
 
+
+
 useEffect(() => {
   if (!product?.images) return;
 
@@ -335,10 +360,10 @@ const handleImageHeadingClick = (index) => {
               )}
 
               {/* 👉 Show CUSTOM image (with text) */}
-              {isCustomizing && (
+              {isCustomizing && showTextOnImage && (
                 <div style={{ position: "relative" }}>
                   <img
-                    src={mainImage || product?.images?.[3] || product?.images?.[0]}
+                    src={mainImage || product?.images?.[3] || product?.images?.[1]}
                     className="img-fluid"
                     alt="custom"
                   />
@@ -362,22 +387,24 @@ const handleImageHeadingClick = (index) => {
                         marginBottom: "4px", // ✅ space between name & designation
                         fontWeight: "600",
                         letterSpacing: "0.5px",
-                          fontSize: `${nameFontSize}px` 
+                       fontSize: isNumberPlate ? "80px" : `${nameFontSize}px`,
                       }}
                     >
                       {customerName || "Your Name"}
                     </h4>
 
-                    <p 
-                      style={{
-                        margin: 0,
-                          fontSize: `${designationFontSize}px`,
-                        letterSpacing: "1px", // ✅ better readability
-                        opacity: 0.9,
-                      }}
-                    >
-                      {designation || "Your Designation"}
-                    </p>
+                   {!isNumberPlate && (
+  <p 
+    style={{
+      margin: 0,
+      fontSize: `${designationFontSize}px`,
+      letterSpacing: "1px",
+      opacity: 0.9,
+    }}
+  >
+    {designation || "Your Designation"}
+  </p>
+)}
                   </div>
                 </div>
               )}
@@ -508,21 +535,36 @@ const handleImageHeadingClick = (index) => {
 </select>
 </div>
           {/* NAME FIELD */}
-          <div className="mb-3">
-            <label className="form-label fw-semibold">Name</label>
-            <input
-              type="text"
-              className={`form-control ${errors.customerName ? "is-invalid" : ""}`}
-              placeholder="Enter Name"
-              maxLength={50}
-              value={customerName}
-              onChange={(e) => setCustomerName(e.target.value)}
-            />
-            {errors.customerName && (
-              <div className="invalid-feedback">Name is required</div>
-            )}
-          </div>
-          <div className="mb-3">
+         {isNumberPlate ? (
+  // 🔥 ONLY NUMBER INPUT
+  <div className="mb-3">
+    <label className="form-label fw-semibold">House Number</label>
+    <textarea
+      className="form-control"
+      placeholder="Enter number/text (max 3 lines)"
+      rows={3}   // shows 3 lines by default
+      value={customerName}
+      onChange={(e) => setCustomerName(e.target.value)}
+    />
+    
+  </div>
+  
+) : (
+  // 🔥 NORMAL NAME + DESIGNATION
+  <>
+    <div className="mb-3">
+    <label className="form-label fw-semibold">
+  {product?.category === "House" ? "Text 1" : "Name"}
+</label>
+      <input
+        type="text"
+        className={`form-control ${errors.customerName ? "is-invalid" : ""}`}
+    placeholder={isNumberPlate ? "Enter Name":"Enter Text 1"  }
+        value={customerName}
+        onChange={(e) => setCustomerName(e.target.value)}
+      />
+
+        <div className="mb-3">
   <div className="d-flex align-items-center gap-2">
     <Button
       size="sm"
@@ -543,24 +585,20 @@ const handleImageHeadingClick = (index) => {
     </Button>
   </div>
 </div>
+    </div>
 
-          {/* DESIGNATION FIELD */}
-          <div className="mb-3">
-            <label className="form-label fw-semibold">Designation</label>
-            <input
-              type="text"
-              className={`form-control ${errors.designation ? "is-invalid" : ""}`}
-              placeholder="Enter Designation"
-              maxLength={50}
-              value={designation}
-              onChange={(e) => setDesignation(e.target.value)}
-            />
-            {errors.designation && (
-              <div className="invalid-feedback">Designation is required</div>
-            )}
-          </div>
-
-          <div className="mb-3">
+    <div className="mb-3">
+     <label className="form-label fw-semibold">
+  {product?.category === "House" ? "Text 2" : "Designation"}
+</label>
+      <input
+        type="text"
+        className={`form-control ${errors.designation ? "is-invalid" : ""}`}
+      placeholder={isNumberPlate ? "Enter Designation":"Enter Text 2" }
+        value={designation}
+        onChange={(e) => setDesignation(e.target.value)}
+      />
+        <div className="mb-3">
   <div className="d-flex align-items-center gap-2">
     <Button
       size="sm"
@@ -581,6 +619,15 @@ const handleImageHeadingClick = (index) => {
     </Button>
   </div>
 </div>
+    </div>
+  </>
+)}
+        
+
+          {/* DESIGNATION FIELD */}
+        
+
+        
 
                         {/* TEXT COLOR */}
 <div className="mb-3">
@@ -650,36 +697,46 @@ const handleImageHeadingClick = (index) => {
         </Modal.Header>
 
         <Modal.Body className="text-center">
-          <div style={{ position: "relative", display: "inline-block" }}>
+          
 
             {/* IMAGE */}
-            <img
-              src={mainImage || product?.images?.[0]}
-              alt="Preview"
-              className="img-fluid"
-            />
+       <div className="image-preview-wrapper" ref={previewRef}>
+  <img
+    src={mainImage || product?.images?.[0]}
+    className="img-fluid"
+    alt="preview"
+  />
 
-            {/* ✅ NAME + DESIGNATION (SAME POSITION) */}
-            <div
-              style={{
-                position: "absolute",
-                top: product?.textPositions?.fields?.[0]?.top || "50%",
-                left: product?.textPositions?.fields?.[0]?.left || "50%",
-                transform: "translate(-50%, -90%)",
-               color: textColor,
-fontFamily: fontFamily,
-                textAlign: "center"
-              }}
-            >
-              <h4 style={{ margin: 0 }}>
-                {customerName || "Your Name"}
-              </h4>
-              <p style={{ margin: 0 }}>
-                {designation || "Your Designation"}
-              </p>
-            </div>
+  {showTextOnImage && (customerName || designation) && (
+   <div
+  style={{
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
+    color: textColor,
+    fontFamily: fontFamily,
+    textAlign: "center",
+  }}
+>
+  {isNumberPlate ? (
+    <div style={{ fontSize: "80px", whiteSpace: "pre-line" }}>
+      {customerName}
+    </div>
+  ) : (
+    <>
+      <div style={{ fontSize: `${nameFontSize}px` }}>
+        {customerName || "Your Name"}
+      </div>
 
-          </div>
+      <div style={{ fontSize: `${designationFontSize}px` }}>
+        {designation || "Your Designation"}
+      </div>
+    </>
+  )}
+</div>
+  )}
+</div>
         </Modal.Body>
 
         <Modal.Footer>
